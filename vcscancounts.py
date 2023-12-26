@@ -65,9 +65,8 @@ def get_incomplete_sandbox_scans(this_app_guid, this_app_id):
         builds = etree.fromstring(data)
         buildid = builds[0].get('build_id')
         log.debug("Checking application guid {}, sandbox {}, build {}".format(this_app_guid, sandboxid, buildid))
-        status = builds[0].get('results_ready')
 
-        if status == 'false':
+        if (status := builds[0].get('results_ready')) == 'false':
             log.info("Status for sandbox scan {} in sandbox id {} for application {} was {}".format(buildid, sandboxid, this_app_guid, status))
             sandboxscancount += 1
 
