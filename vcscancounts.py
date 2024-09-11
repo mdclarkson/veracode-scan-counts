@@ -8,6 +8,7 @@ from lxml import etree
 
 import anticrlf
 from veracode_api_py import VeracodeAPI as vapi
+import lxml.etree
 
 log = logging.getLogger(__name__)
 
@@ -62,7 +63,7 @@ def get_incomplete_sandbox_scans(this_app_guid, this_app_id):
         sandboxid = sandbox.get('id')
         data = vapi().get_build_info(app_id=this_app_id, sandbox_id=sandboxid) #returns most recent build for sandbox
 
-        builds = etree.fromstring(data)
+        builds = etree.fromstring(data, parser=lxml.etree.XMLParser(resolve_entities=False))
         buildid = builds[0].get('build_id')
         log.debug("Checking application guid {}, sandbox {}, build {}".format(this_app_guid, sandboxid, buildid))
         status = builds[0].get('results_ready')
